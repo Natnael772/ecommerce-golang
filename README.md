@@ -26,6 +26,7 @@ This backend serves as the foundation for a **production-grade eCommerce system*
 | **Database**          | [PGX](https://github.com/jackc/pgx)                         | High-performance PostgreSQL driver                      |
 | **Query Generation**  | [SQLC](https://sqlc.dev)                                    | Type-safe SQL query to Go code generator                |
 | **Migration**         | [golang-migrate](https://github.com/golang-migrate/migrate) | Database schema migration                               |
+| **Validation**        | [go-playground](https://github.com/go-playground/validator) | Request payload validation                              |
 | **Payments**          | [Stripe](https://stripe.com/docs/api)                       | Secure payment integration                              |
 | **Config Management** | `.env` + `configs` package                                  | Environment-based configuration setup                   |
 | **Architecture**      | Modular (Domain-Driven)                                     | Each domain encapsulates handler, service, repo, routes |
@@ -90,40 +91,41 @@ The payment domain encapsulates all Stripe-related functionality.
 
 Features
 
-Create payment intents for checkout
+- Create payment intents for checkout
 
-Handle Stripe webhooks for confirmation events
+- Handle Stripe webhooks for confirmation events
 
-Store and update transaction records
+- Store and update transaction records
 
-Graceful failure handling with rollback logic
+- Graceful failure handling with rollback logic
 
-Secure secret key management via .env
+- Secure secret key management via .env
 
 🧩 Architectural Principles
 
-Modular Domains — Each feature area (product, order, payment, user, etc.) is fully self-contained.
+- Modular Domains — Each feature area (product, order, payment, user, etc.) is fully self-contained.
 
-No Global Dependencies — Dependency injection ensures testability and scalability.
+- No Global Dependencies — Dependency injection ensures testability and scalability.
 
-SQLC + PGX — Compile-time validated SQL and optimized DB access.
+- SQLC + PGX — Compile-time validated SQL and optimized DB access.
 
-High Testability — Each domain can be tested independently.
+- High Testability — Each domain can be tested independently.
 
 Environment Isolation — .env-driven configuration for local, staging, and production environments.
 
 ⚙️ Setup & Installation
+
 1️⃣ Prerequisites
 
-Go 1.22+
+- Go 1.22+
 
-PostgreSQL 15+
+- PostgreSQL 15+
 
-Docker & Docker Compose
+- Docker & Docker Compose
 
-Stripe account and API keys
+- Stripe account and API keys
 
-golang-migrate CLI
+- golang-migrate CLI
 
 2️⃣ Clone the repository
 
@@ -164,21 +166,23 @@ go run cmd/api/main.go
 
 This project embodies:
 
-Performance-first design — Leveraging PGX and SQLC.
+- Performance-first design — Leveraging PGX and SQLC.
 
-Domain encapsulation — Modules own their data, logic, and interfaces.
+- Domain encapsulation — Modules own their data, logic, and interfaces.
 
-Security by design — JWT, password hashing, Stripe webhook validation.
+- Security by design — JWT, password hashing, Stripe webhook validation.
 
-Scalability — Horizontally extendable via independent domain modules.
+- Scalability — Horizontally extendable via independent domain modules.
 
-Clean abstractions — Repository, Service, Handler pattern.
+- Clean abstractions — Repository, Service, Handler pattern.
 
 🧪 Testing
 
 Run all unit and integration tests:
 
+```bash
 go test ./... -v
+```
 
 Each domain is independently testable — enabling isolated business logic validation.
 
