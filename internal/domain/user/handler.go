@@ -52,7 +52,7 @@ func (h *Handler) GetUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(u)
 }
 
-func (h *Handler) ListUsers(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetUsers(w http.ResponseWriter, r *http.Request) {
 	page,_ := strconv.Atoi(r.URL.Query().Get("page"))
 	perPage,_ :=strconv.Atoi( r.URL.Query().Get("per_page"))
 
