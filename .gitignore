@@ -37,6 +37,7 @@ Thumbs.db
 .env
 .env.local
 .env.*
+!.env.example  # Exclude .env.example from being ignored
 
 # Docker related
 docker-compose.override.yaml
