@@ -1,10 +1,11 @@
 package review
 
 import (
+	"ecommerce-app/internal/pkg/middleware"
 	"ecommerce-app/internal/pkg/response"
 	"ecommerce-app/internal/pkg/validator"
+	"ecommerce-app/pkg/pagination"
 	"net/http"
-	"strconv"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -18,8 +19,7 @@ func NewHandler(svc Service) *Handler {
 }
 
 func (h *Handler) CreateReview(w http.ResponseWriter, r *http.Request) {
-	// userID := r.Context().Value("user_id").(string) 
-	userID := "fbc681a1-6653-4ab9-b687-a38d63b553db"
+	userID := r.Context().Value(middleware.UserIDKey).(string)
 	req := validator.GetValidatedBody[CreateReviewRequest](r)
 
 	category, appErr := h.svc.CreateReview(r.Context(), userID, req)
@@ -33,8 +33,7 @@ func (h *Handler) CreateReview(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) GetReviewsByProduct(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	page,_ := strconv.Atoi(r.URL.Query().Get("page"))
-	perPage,_ :=strconv.Atoi( r.URL.Query().Get("per_page"))
+	page, perPage := pagination.GetPaginationParams(r)
 
 	result, appErr := h.svc.GetReviewsByProduct(r.Context(),id, page, perPage)
 	if appErr != nil {

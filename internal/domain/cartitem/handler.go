@@ -1,6 +1,7 @@
 package cartitem
 
 import (
+	"ecommerce-app/internal/pkg/middleware"
 	"ecommerce-app/internal/pkg/response"
 	"ecommerce-app/internal/pkg/validator"
 	"net/http"
@@ -18,7 +19,7 @@ func NewHandler(svc Service) *Handler {
 
 func (h *Handler) AddItem(w http.ResponseWriter, r *http.Request) {
 	req := validator.GetValidatedBody[AddItemRequest](r)
-	userID := "692fab5a-8cdd-41ba-89cb-3e45660c7a62"
+	userID := r.Context().Value(middleware.UserIDKey).(string)
 	
 
 	item, appErr := h.svc.AddItem(r.Context(),userID, req)
@@ -32,7 +33,7 @@ func (h *Handler) AddItem(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) AddItems(w http.ResponseWriter, r *http.Request) {
 	req := validator.GetValidatedBody[[]AddItemRequest](r)
-	userID := "692fab5a-8cdd-41ba-89cb-3e45660c7a62"
+	userID := r.Context().Value(middleware.UserIDKey).(string)
 
 	items, appErr := h.svc.AddItems(r.Context(),userID, req)
 	if appErr != nil {
@@ -44,7 +45,7 @@ func (h *Handler) AddItems(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) GetUserCartItems(w http.ResponseWriter, r *http.Request) {
-	userID := "692fab5a-8cdd-41ba-89cb-3e45660c7a62"
+	userID := r.Context().Value(middleware.UserIDKey).(string)
 
 	items, appErr := h.svc.GetItemsByUserID(r.Context(), userID)
 	if appErr != nil {
@@ -118,7 +119,7 @@ func (h *Handler) DeleteItemsByCart(w http.ResponseWriter, r *http.Request) {
 
 
 func (h *Handler) ClearCartItems(w http.ResponseWriter, r *http.Request) {
-	userID := "692fab5a-8cdd-41ba-89cb-3e45660c7a62"
+	userID := r.Context().Value(middleware.UserIDKey).(string)
 
 	appErr := h.svc.ClearCartItems(r.Context(), userID)
 	if appErr != nil {

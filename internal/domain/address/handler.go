@@ -1,6 +1,7 @@
 package address
 
 import (
+	"ecommerce-app/internal/pkg/middleware"
 	"ecommerce-app/internal/pkg/response"
 	"ecommerce-app/internal/pkg/validator"
 	"net/http"
@@ -17,8 +18,7 @@ func NewHandler(svc Service) *Handler {
 }
 
 func (h *Handler) CreateAddress(w http.ResponseWriter, r *http.Request) {
-	// userID := r.Context().Value("user_id").(string) 
-	userID := "18f49bfc-ca0a-407d-9845-fc67cd86b402"
+	userID := r.Context().Value(middleware.UserIDKey).(string)
 	req := validator.GetValidatedBody[CreateAddressRequest](r)
 
 	address, appErr := h.svc.CreateAddress(r.Context(), userID, req)
@@ -31,8 +31,7 @@ func (h *Handler) CreateAddress(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) getAddressesByUser(w http.ResponseWriter, r *http.Request) {
-	// userID := r.Context().Value("user_id").(string) 
-	userID := "18f49bfc-ca0a-407d-9845-fc67cd86b402"
+	userID := r.Context().Value(middleware.UserIDKey).(string)
 
 	address, appErr := h.svc.GetAddressesByUserID(r.Context(), userID)
 	if appErr != nil {
