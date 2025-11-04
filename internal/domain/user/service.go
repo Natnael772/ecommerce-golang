@@ -28,7 +28,6 @@ func NewService(repo Repository) Service {
 	return &service{repo}
 }
 
-
 func (s *service) Register(ctx context.Context, req RegisterUserRequest) (User, *errs.AppError) {
 	exists, err := s.repo.GetByEmail(ctx, req.Email)
 
@@ -45,21 +44,22 @@ func (s *service) Register(ctx context.Context, req RegisterUserRequest) (User, 
 	if err != nil {
 		return User{}, errs.ErrInternal.WithMessage("failed to hash password")
 	}
-	user := User{
+	
+	userData := User{
 		Email:    req.Email,
 		Password: hash,
 		FirstName: req.FirstName,
 		LastName: req.LastName,
 		Role: req.Role,
 	}
-	createdUser, err := s.repo.Create(ctx, user)
+	user, err := s.repo.Create(ctx, userData)
 	if err != nil {
 		return User{}, errs.ErrInternal.WithMessage("failed to create user")
 	}
-	return createdUser, nil
+
+	return user, nil
 }
 
-// Login checks user credentials
 func (s *service) Login(ctx context.Context, req LoginRequest) (UserWithToken, *errs.AppError) {
 	u, err := s.repo.GetByEmail(ctx, req.Email)
 	if err != nil {
@@ -71,10 +71,11 @@ func (s *service) Login(ctx context.Context, req LoginRequest) (UserWithToken, *
 		return UserWithToken{}, errs.ErrUnauthorized.WithMessage("invalid email or password")
 	}
 
-	jwtSecret := configs.Load().JWTSecret
-	jwtDuration := configs.Load().JWTDuration
-	
-	token, err := jwt.GenerateToken(jwtSecret, u.ID, u.Email, time.Duration(jwtDuration))
+	cfg:= configs.Load()
+	jwtSecret := cfg.JWTSecret
+	jwtDuration := cfg.JWTDuration
+
+	token, err := jwt.GenerateToken(jwtSecret, u.ID, u.Email, u.Role, time.Duration(jwtDuration)*time.Second)
 	if err != nil {
 		return UserWithToken{}, errs.ErrInternal.WithMessage("failed to generate auth token")
 	}
