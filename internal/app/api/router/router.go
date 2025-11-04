@@ -12,6 +12,7 @@ import (
 	"ecommerce-app/internal/domain/payment"
 	"ecommerce-app/internal/domain/product"
 	"ecommerce-app/internal/domain/review"
+	"ecommerce-app/internal/domain/shipment"
 	"ecommerce-app/internal/domain/user"
 	"ecommerce-app/internal/infra/db"
 
@@ -94,6 +95,11 @@ func NewRouter(pool *pgxpool.Pool) chi.Router {
 	inventorySvc := inventory.NewService(inventoryRepo)
 	inventoryRoutes := inventory.Routes(inventorySvc)
 
+	// Shipment domain setup
+	shipmentRepo := shipment.NewRepository(q)
+	shipmentSvc := shipment.NewService(shipmentRepo)
+	shipmentRoutes := shipment.Routes(shipmentSvc)
+
 	// Mount domain routes
 	r.Mount("/users", userRoutes)
 	r.Mount("/products", productRoutes)
@@ -107,6 +113,7 @@ func NewRouter(pool *pgxpool.Pool) chi.Router {
 	r.Mount("/payments", paymentRoutes)
 	r.Mount("/auth", authRoutes)
 	r.Mount("/inventories", inventoryRoutes)
+	r.Mount("/shipments", shipmentRoutes)
 
 	return r
 }
