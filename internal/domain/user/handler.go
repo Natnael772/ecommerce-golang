@@ -3,9 +3,9 @@ package user
 import (
 	"ecommerce-app/internal/pkg/response"
 	"ecommerce-app/internal/pkg/validator"
+	"ecommerce-app/pkg/pagination"
 	"encoding/json"
 	"net/http"
-	"strconv"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -53,8 +53,7 @@ func (h *Handler) GetUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) GetUsers(w http.ResponseWriter, r *http.Request) {
-	page,_ := strconv.Atoi(r.URL.Query().Get("page"))
-	perPage,_ :=strconv.Atoi( r.URL.Query().Get("per_page"))
+	page, perPage := pagination.GetPaginationParams(r)
 
 	result, appErr := h.svc.ListUsers(r.Context(), int32(page), int32(perPage))
 	
