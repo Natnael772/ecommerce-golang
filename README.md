@@ -147,11 +147,14 @@ cp .env.example .env
 4️⃣ Run Services
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 5️⃣ Run Database Migrations
+
+```bash
 migrate -path scripts/sql/migrations -database "postgres://user:password@localhost:5432/ecommerce?sslmode=disable" up
+```
 
 6️⃣ Generate SQLC Code
 
