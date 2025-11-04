@@ -2,6 +2,8 @@ package review
 
 import "github.com/google/uuid"
 
+// --- Request Dto ---
+
 type CreateReviewRequest struct {
 	ProductID uuid.UUID `json:"product_id" validate:"required"`
 	Rating    int32     `json:"rating" validate:"required,gte=1,lte=5"`

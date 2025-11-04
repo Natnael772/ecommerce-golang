@@ -21,3 +21,4 @@ type ReviewsWithMeta struct {
 	Reviews     []Review `json:"reviews"`
 	Meta       response.Meta       `json:"meta"`
 }
+

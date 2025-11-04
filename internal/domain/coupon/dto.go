@@ -2,6 +2,7 @@ package coupon
 
 import "time"
 
+// -- Request Dto ---
 type CreateCouponRequest struct {
 	Code            string  `json:"code" validate:"required,alphanum,min=3,max=20"`
 	Description     string  `json:"description" validate:"required,min=5,max=255"`

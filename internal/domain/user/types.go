@@ -25,3 +25,4 @@ type UsersWithMeta struct {
 	Users []User     `json:"users"`
 	Meta  response.Meta `json:"meta"`
 }
+

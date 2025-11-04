@@ -26,3 +26,4 @@ type CouponsWithMeta struct {
 	Coupons []Coupon     `json:"coupons"`
 	Meta    response.Meta `json:"meta"`
 }
+
