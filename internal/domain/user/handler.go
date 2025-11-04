@@ -30,17 +30,6 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	response.Created(w, user) 
 }
 
-func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
-	req := validator.GetValidatedBody[LoginRequest](r)
-	
-	resp, appErr := h.svc.Login(r.Context(), req)
-	if appErr != nil {
-		response.Error(w, appErr.Code, appErr.Message)
-		return
-	}
-
-	response.OK(w, resp, "Login successful")
-}
 
 func (h *Handler) GetUser(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")

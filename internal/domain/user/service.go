@@ -2,19 +2,15 @@ package user
 
 import (
 	"context"
-	"ecommerce-app/configs"
 	"ecommerce-app/internal/pkg/errs"
-	"ecommerce-app/internal/pkg/jwt"
 	"ecommerce-app/internal/pkg/password"
 	"ecommerce-app/internal/pkg/response"
 	"ecommerce-app/pkg/pagination"
 	"errors"
-	"time"
 )
 
 type Service interface {
 	Register(ctx context.Context, req RegisterUserRequest) (User, *errs.AppError)
-	Login(ctx context.Context, req LoginRequest) (UserWithToken, *errs.AppError)
 	GetUser(ctx context.Context, id string) (User, error)
 	ListUsers(ctx context.Context, page, itemsPerPage int32) (UsersWithMeta, *errs.AppError)
 	
@@ -58,34 +54,6 @@ func (s *service) Register(ctx context.Context, req RegisterUserRequest) (User, 
 	}
 
 	return user, nil
-}
-
-func (s *service) Login(ctx context.Context, req LoginRequest) (UserWithToken, *errs.AppError) {
-	u, err := s.repo.GetByEmail(ctx, req.Email)
-	if err != nil {
-		return UserWithToken{}, errs.ErrUnauthorized.WithMessage("invalid email or password")
-	}
-
-	isPasswordValid := password.Check(req.Password, u.Password)
-	if !isPasswordValid {
-		return UserWithToken{}, errs.ErrUnauthorized.WithMessage("invalid email or password")
-	}
-
-	cfg:= configs.Load()
-	jwtSecret := cfg.JWTSecret
-	jwtDuration := cfg.JWTDuration
-
-	token, err := jwt.GenerateToken(jwtSecret, u.ID, u.Email, u.Role, time.Duration(jwtDuration)*time.Second)
-	if err != nil {
-		return UserWithToken{}, errs.ErrInternal.WithMessage("failed to generate auth token")
-	}
-
-	data := UserWithToken{
-		User:  u,
-		Token: token,
-	}
-	
-	return data, nil
 }
 
 func (s *service) GetUser(ctx context.Context, id string) (User, error) {
