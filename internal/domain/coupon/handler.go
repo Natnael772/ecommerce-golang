@@ -3,8 +3,8 @@ package coupon
 import (
 	"ecommerce-app/internal/pkg/response"
 	"ecommerce-app/internal/pkg/validator"
+	"ecommerce-app/pkg/pagination"
 	"net/http"
-	"strconv"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -32,8 +32,7 @@ func (h *Handler) CreateCoupon(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) GetCoupons(w http.ResponseWriter, r *http.Request) {
-	page,_ := strconv.Atoi(r.URL.Query().Get("page"))
-	perPage,_ :=strconv.Atoi( r.URL.Query().Get("per_page"))
+	page, perPage := pagination.GetPaginationParams(r)
 
 	result, appErr := h.svc.GetCoupons(r.Context(), page, perPage)
 	if appErr != nil {
