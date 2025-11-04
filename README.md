@@ -161,7 +161,13 @@ docker compose up -d
 6️⃣ Run Database Migrations
 
 ```bash
-migrate -path scripts/sql/migrations -database "postgres://user:password@localhost:5432/ecommerce?sslmode=disable" up
+migrate -path scripts/sql/migrations -database "postgres://<DB_USER>:<DB_PASSWORD>@<DB_HOST>:<DB_PORT>/<DB_NAME>?sslmode=disable" up
+```
+
+Example:
+
+```bash
+migrate -path scripts/sql/migrations -database "postgres://admin:mysecretpassword@localhost/ecommerce_db?sslmode=disable" up
 ```
 
 7️⃣ Generate SQLC Code
