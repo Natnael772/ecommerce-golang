@@ -27,10 +27,11 @@ type TokenPair struct {
 }
 
 
-func GenerateToken(secretKey, userID, email string, accessDuration time.Duration) (string, error) {
+func GenerateToken(secretKey, userID, email, role string, accessDuration time.Duration) (string, error) {
 	claims := Claims{
 		UserID: userID,
 		Email:  email,
+		Role :  role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(accessDuration)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
@@ -42,8 +43,8 @@ func GenerateToken(secretKey, userID, email string, accessDuration time.Duration
 	return token.SignedString([]byte(secretKey))
 }
 
-func GenerateTokenPair(secretKey, userID, email string, accessDuration, refreshDuration time.Duration) (*TokenPair, error) {
-	accessToken, err := GenerateToken(secretKey, userID, email, accessDuration)
+func GenerateTokenPair(secretKey, userID, email, role string, accessDuration, refreshDuration time.Duration) (*TokenPair, error) {
+	accessToken, err := GenerateToken(secretKey, userID, email, role, accessDuration)
 	if err != nil {
 		return nil, err
 	}
