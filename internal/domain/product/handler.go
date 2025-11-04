@@ -3,8 +3,8 @@ package product
 import (
 	"ecommerce-app/internal/pkg/response"
 	"ecommerce-app/internal/pkg/validator"
+	"ecommerce-app/pkg/pagination"
 	"net/http"
-	"strconv"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -30,8 +30,7 @@ func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
-	page,_ := strconv.Atoi(r.URL.Query().Get("page"))
-	perPage,_ :=strconv.Atoi( r.URL.Query().Get("per_page"))
+	page, perPage := pagination.GetPaginationParams(r)
 
 	result, appErr := h.svc.ListProducts(r.Context(), page, perPage)
 	if appErr != nil {
@@ -44,6 +43,7 @@ func (h *Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) GetProduct(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
+	
 	product, appErr := h.svc.GetProductByID(r.Context(), id)
 	if appErr != nil {
 		response.Error(w, appErr.Code, appErr.Message)

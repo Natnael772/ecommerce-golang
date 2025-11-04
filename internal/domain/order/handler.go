@@ -2,10 +2,11 @@
 package order
 
 import (
+	"ecommerce-app/internal/pkg/middleware"
 	"ecommerce-app/internal/pkg/response"
 	"ecommerce-app/internal/pkg/validator"
+	"ecommerce-app/pkg/pagination"
 	"net/http"
-	"strconv"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -19,9 +20,8 @@ func NewHandler(svc Service) *Handler {
 }
 
 func (h *Handler) CreateOrder(w http.ResponseWriter, r *http.Request) {
-	// userID := r.Context().Value("user_id").(string)
-	userID := "0e451c10-a776-4bf1-be33-e5684d954dc3"
 	req := validator.GetValidatedBody[CreateOrderRequest](r)
+	userID := r.Context().Value(middleware.UserIDKey).(string)
 
 	res, appErr := h.svc.CreateOrder(r.Context(), userID, req)
 	if appErr != nil {
@@ -33,10 +33,8 @@ func (h *Handler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) GetOrdersByUser(w http.ResponseWriter, r *http.Request) {
-	// userID := r.Context().Value("user_id").(string)
-	userID := "0e451c10-a776-4bf1-be33-e5684d954dc3"
-	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
-	perPage, _ := strconv.Atoi(r.URL.Query().Get("per_page"))
+	page, perPage := pagination.GetPaginationParams(r)
+	userID := r.Context().Value(middleware.UserIDKey).(string)
 
 	result, appErr := h.svc.GetOrdersByUserID(r.Context(), userID, page, perPage)
 	if appErr != nil {
@@ -60,8 +58,7 @@ func (h *Handler) GetOrderByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) GetAllOrders(w http.ResponseWriter, r *http.Request) {
-	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
-	perPage, _ := strconv.Atoi(r.URL.Query().Get("per_page"))
+	page, perPage := pagination.GetPaginationParams(r)
 	
 	result, appErr := h.svc.GetAllOrders(r.Context(), page, perPage)
 	if appErr != nil {
