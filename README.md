@@ -55,8 +55,10 @@ This backend serves as the foundation for a **production-grade eCommerce system*
 │   │   └── payment/         # Stripe integration module
 │   │       ├── handler.go   # Webhook and payment endpoints
 │   │       ├── service.go   # Stripe payment orchestration logic
-│   │       ├── repository.go# Payment transaction persistence
+│   │       ├── repository.go # Payment transaction persistence
 │   │       └── routes.go    # Route registration
+│   │       └── types.go     # Entity structs
+│   │       └── dto.go       # Request payload (dto) structs
 │   │   └── stripe/          # Stripe payment integration
 │   │       ├── client.go    # Stripe client: handles webhooks, payment intents, refunds
 │   │       └── types.go     # Strongly typed Stripe-related structs
