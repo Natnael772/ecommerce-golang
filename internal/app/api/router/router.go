@@ -2,6 +2,7 @@ package router
 
 import (
 	"ecommerce-app/internal/domain/address"
+	"ecommerce-app/internal/domain/auth"
 	"ecommerce-app/internal/domain/cart"
 	"ecommerce-app/internal/domain/cartitem"
 	"ecommerce-app/internal/domain/category"
@@ -82,6 +83,11 @@ func NewRouter(pool *pgxpool.Pool) chi.Router {
 	paymentSvc := payment.NewPaymentService(paymentRepo, orderSvc)
 	paymentRoutes := payment.Routes(paymentSvc)
 
+	// Auth domain setup
+	authRepo := auth.NewRepository(q)
+	authSvc := auth.NewService(authRepo)
+	authRoutes := auth.Routes(authSvc)
+
 	// Mount domain routes
 	r.Mount("/users", userRoutes)
 	r.Mount("/products", productRoutes)
@@ -93,6 +99,7 @@ func NewRouter(pool *pgxpool.Pool) chi.Router {
 	r.Mount("/addresses", addressRoutes)
 	r.Mount("/orders", orderRoutes)
 	r.Mount("/payments", paymentRoutes)
+	r.Mount("/auth", authRoutes)
 
 	return r
 }
