@@ -144,25 +144,34 @@ Copy and update your environment file:
 cp .env.example .env
 ```
 
-4️⃣ Run Services
+4️⃣ Install Go Dependencies
+
+Before running any Go code, install all required packages:
+
+```bash
+go mod tidy
+```
+
+5️⃣ Run Services
 
 ```bash
 docker compose up -d
 ```
 
-5️⃣ Run Database Migrations
+6️⃣ Run Database Migrations
 
 ```bash
 migrate -path scripts/sql/migrations -database "postgres://user:password@localhost:5432/ecommerce?sslmode=disable" up
 ```
 
-6️⃣ Generate SQLC Code
+7️⃣ Generate SQLC Code
+Generate Go code from SQL queries:
 
 ```bash
 sqlc generate
 ```
 
-7️⃣ Start the API
+8️⃣ Start the API
 
 ```bash
 go run cmd/api/main.go
