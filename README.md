@@ -152,13 +152,19 @@ Before running any Go code, install all required packages:
 go mod tidy
 ```
 
-5️⃣ Run Services
+5️⃣ Install CLI Tools
+
+Install the migrate CLI by following the instructions in the official repository: https://github.com/golang-migrate/migrate
+
+Install the sqlc CLI by following the instructions in the official repository: https://github.com/sqlc-dev/sqlc
+
+6️⃣ Run Services
 
 ```bash
 docker compose up -d
 ```
 
-6️⃣ Run Database Migrations
+7️⃣ Run Database Migrations
 
 ```bash
 migrate -path scripts/sql/migrations -database "postgres://<DB_USER>:<DB_PASSWORD>@<DB_HOST>:<DB_PORT>/<DB_NAME>?sslmode=disable" up
@@ -170,14 +176,14 @@ Example:
 migrate -path scripts/sql/migrations -database "postgres://admin:mysecretpassword@localhost/ecommerce_db?sslmode=disable" up
 ```
 
-7️⃣ Generate SQLC Code
+8️⃣ Generate SQLC Code
 Generate Go code from SQL queries:
 
 ```bash
 sqlc generate
 ```
 
-8️⃣ Start the API
+9️⃣ Start the API
 
 ```bash
 go run cmd/api/main.go
