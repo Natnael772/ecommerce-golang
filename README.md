@@ -70,6 +70,7 @@ This backend serves as the foundation for a **production-grade eCommerce system*
 │   ├── jwt/                 # JWT token handling
 │   ├── password/            # Password hashing utilities
 │   ├── logger/              # Structured logging
+│   ├── middleware/          # Role based access control middleware
 │   ├── response/            # Unified API response format
 │   ├── validator/           # Input validation
 │   ├── pagination/          # Pagination helpers
